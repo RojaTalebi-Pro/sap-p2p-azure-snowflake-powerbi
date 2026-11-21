@@ -1,0 +1,62 @@
+{
+  "name": "pl_ingest_sap_sample",
+  "properties": {
+    "description": "ADF illustrative template: requires linked services and datasets before deployment.",
+    "parameters": {
+      "entity": {
+        "type": "String",
+        "defaultValue": "EKKO"
+      }
+    },
+    "activities": [
+      {
+        "name": "CopySyntheticSapEntity",
+        "type": "Copy",
+        "policy": {
+          "timeout": "0.01:00:00",
+          "retry": 2,
+          "retryIntervalInSeconds": 30
+        },
+        "typeProperties": {
+          "source": {
+            "type": "DelimitedTextSource",
+            "storeSettings": {
+              "type": "AzureBlobStorageReadSettings",
+              "recursive": false
+            }
+          },
+          "sink": {
+            "type": "DelimitedTextSink",
+            "storeSettings": {
+              "type": "AzureBlobFSWriteSettings"
+            }
+          }
+        },
+        "inputs": [
+          {
+            "referenceName": "ds_sap_sample_blob",
+            "type": "DatasetReference",
+            "parameters": {
+              "entity": {
+                "value": "@pipeline().parameters.entity",
+                "type": "Expression"
+              }
+            }
+          }
+        ],
+        "outputs": [
+          {
+            "referenceName": "ds_adls_landing",
+            "type": "DatasetReference",
+            "parameters": {
+              "entity": {
+                "value": "@pipeline().parameters.entity",
+                "type": "Expression"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
