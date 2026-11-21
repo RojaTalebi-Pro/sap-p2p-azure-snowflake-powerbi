@@ -1,0 +1,6 @@
+Total PO Value = SUM ( fact_purchase_order[po_amount] )
+Total Invoice Value = SUM ( fact_invoice[invoice_amount] )
+Purchase Order Count = DISTINCTCOUNT ( fact_purchase_order[po_id] )
+Invoice Count = DISTINCTCOUNT ( fact_invoice[invoice_id] )
+Blocked Invoice Count = CALCULATE ( [Invoice Count], fact_invoice[invoice_status] = "BLOCKED" )
+Blocked Invoice Rate = DIVIDE ( [Blocked Invoice Count], [Invoice Count] )
